@@ -3,7 +3,7 @@
 
 //############### CONFIGURAÇÕES GERAIS ####################
 #define VERSAOFW "3.5"
-#define NODENAME "DIR"
+#define NODENAME "FRENTE
 #define SPARKFUN_MPU9250_LIB 1
 //############### CONFIGURAÇÕES WIFI ####################
 #define MAX_BUF_SIZE 255
@@ -41,8 +41,10 @@
 #define DEBUG_CSI 1
 #define SEM_FILTRO 0  //0:ATIVA O FILTRO , 1:DESATIVA O FILTRO E COLETA TODAS REDES!
 #if 1
-    #define STATIC_CHANNEL 11
+    #define STATIC_CHANNEL 9
 #endif
 #define N_COLETAS 15
-#define DEFAULT_SSID "CONNECTED_2.4G"
-#define DEFAULT_PWD "nickyfofo"
+// #define DEFAULT_SSID "CONNECTED_2.4G"
+// #define DEFAULT_PWD "nickyfofo"
+#define DEFAULT_SSID "Prosaico01"
+#define DEFAULT_PWD "semfiopros@ico01"

@@ -3,7 +3,7 @@
 #include "csi_functions.h"
 #include "soc/soc.h"
 #include "soc/rtc_cntl_reg.h"
-
+#include "functions.h"
 #if SPARKFUN_MPU9250_LIB == 1
   #include "MPU9250.h"
   float compass_heading = 0;
@@ -285,9 +285,14 @@ void csi_coleta(){
 					ht_chan=WIFI_SECOND_CHAN_NONE;
 			}
 #ifdef STATIC_CHANNEL	
-			//esp_wifi_set_channel(STATIC_CHANNEL, ht_chan);
+			// esp_wifi_set_channel(STATIC_CHANNEL, ht_chan);
+      // printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", STATIC_CHANNEL, ht_chan);
+      // esp_wifi_set_channel(STATIC_CHANNEL, WIFI_SECOND_CHAN_ABOVE);
+      // printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", STATIC_CHANNEL, WIFI_SECOND_CHAN_ABOVE);
       esp_wifi_set_channel(STATIC_CHANNEL, WIFI_SECOND_CHAN_NONE);
       printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", STATIC_CHANNEL, WIFI_SECOND_CHAN_NONE);
+      
+      
       Serial.println("Disconnect!");
 			ESP_ERROR_CHECK(esp_wifi_disconnect());
 			usleep(300*1000);
@@ -295,6 +300,12 @@ void csi_coleta(){
 			ESP_ERROR_CHECK(esp_wifi_connect());
 			usleep(1800*1000);
 			//ESP_ERROR_CHECK(ret);
+      if(millis()>time_out_csi){
+        Serial.println("Estou sem receber pacotes CSI há um tempo!");
+        //time_out_csi = return_end_time(15*1e3);
+        //ESP_ERROR_CHECK(esp_wifi_disconnect());
+        //setup_wifi_csi();
+      }
 #else
 			for (int chan=1;chan<12;chan++){
 				printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", chan, bandwith);
@@ -429,6 +440,7 @@ void loop() {
             set_static_channel = true;
           #endif
           setup_wifi_csi();
+          time_out_csi = return_end_time(15*1e3);
         #endif
           break;
       case type_requestdata:

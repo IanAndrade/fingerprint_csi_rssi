@@ -12,6 +12,7 @@
 #include <Arduino.h>
 #include "structures.h"
 
+extern unsigned long time_out_csi;
 extern esp_err_t ret;
 extern wifi_second_chan_t ht_chan;
 void setup_wifi_csi();

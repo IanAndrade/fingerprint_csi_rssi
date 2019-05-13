@@ -2,7 +2,7 @@
 //#include <Arduino.h>
 #include "soc/timer_group_struct.h"  //Adicionado para evitar erro do wdt     
 #include "soc/timer_group_reg.h"    //Adicionado para evitar erro do wdt
-
+#include "functions.h"
 int curChannel = 1;
 
 #define WIFI_COUNTRY() { \
@@ -61,7 +61,7 @@ uint8_t line = 0;
 // Keep track of beacon sequence numbers on a per-songline-basis
 uint16_t seqnum[TOTAL_LINES] = { 0 };
 
-
+unsigned long time_out_csi = 0;
 //[CHANGED] this I pulled out because this was crashing the code when I was using esp like Station. 
 //Also I could not connect to an AP (using esp as STA)
 static esp_err_t event_handler(void *ctx, system_event_t *event)
@@ -170,6 +170,7 @@ void receive_csi_cb(void *ctx, wifi_csi_info_t *data) {
 String id_coleta = fingerprintState.id_coleta;
 wifi_csi_info_t received = data[0];
 	if (received.rx_ctrl.sig_mode==1){
+		time_out_csi = return_end_time(30*1e3);
 		Serial.println("Recebi pacote CSI!");
     //if((conta_csi<N_COLETAS) && (begin_csi_scan==true)){
 		if((conta_csi<fingerprintState.number_of_scans) && (begin_csi_scan==true)){
