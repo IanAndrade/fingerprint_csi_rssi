@@ -2,8 +2,8 @@
 
 
 //############### CONFIGURAÇÕES GERAIS ####################
-#define VERSAOFW "3.5"
-#define NODENAME "FRENTE
+#define VERSAOFW "3.6"
+#define NODENAME "TRAS"
 #define SPARKFUN_MPU9250_LIB 1
 //############### CONFIGURAÇÕES WIFI ####################
 #define MAX_BUF_SIZE 255
@@ -36,9 +36,11 @@
 #define SCL_PIN 26
 
 //############### CONFIG FINGERPRINT WIFI ####################
-#define SCANS_RSSI_ENABLE 0
-#define CSI_ENABLE 1
-#define DEBUG_CSI 1
+#define SCANS_RSSI_ENABLE 1
+#define SCAN_RSSI_UNIQUE_CHANNEL 1
+#define UNIQUE_CHANNEL_SCAN_RSSI 11
+#define CSI_ENABLE 0
+#define DEBUG_CSI 0
 #define SEM_FILTRO 0  //0:ATIVA O FILTRO , 1:DESATIVA O FILTRO E COLETA TODAS REDES!
 #if 1
     #define STATIC_CHANNEL 9
@@ -47,4 +49,4 @@
 // #define DEFAULT_SSID "CONNECTED_2.4G"
 // #define DEFAULT_PWD "nickyfofo"
 #define DEFAULT_SSID "Prosaico01"
-#define DEFAULT_PWD "semfiopros@ico01"
+#define DEFAULT_PWD "testecsi"

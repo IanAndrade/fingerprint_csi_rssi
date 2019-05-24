@@ -148,9 +148,14 @@ void wifi_list() {
     //dataMessage += "device,n_scan,mac,reqID,ssdid,channel,rssi,acx,acy,acz,acsqrt,magx,magy,magz,maghdir,gyrox,gyroy,gyroz\n";
 #endif
     // WiFi.scanNetworks will return the number of networks found
-    // unsigned long tempo = millis();
-    int n = WiFi.scanNetworks();
-    // printf("Tempo de duracao scan:%d",(millis()-tempo));
+    unsigned long tempo = millis();
+#if SCAN_RSSI_UNIQUE_CHANNEL == 1
+  int n = WiFi.scanNetworks(false,false,false,300,UNIQUE_CHANNEL_SCAN_RSSI);
+#else
+  //int n = WiFi.scanNetworks();
+#endif
+      
+    printf("Tempo de duracao scan:%d",(millis()-tempo));
     //UDP.println("scan done");
     if (n == 0){
 #if FORMATO_DADOS == 0
@@ -301,19 +306,23 @@ void csi_coleta(){
 			usleep(1800*1000);
 			//ESP_ERROR_CHECK(ret);
       if(millis()>time_out_csi){
-        Serial.println("Estou sem receber pacotes CSI há um tempo!");
+        Serial.println("Estou sem receber pacotes CSI há um tempo! Desisti!!!");
+          begin_csi_scan=false;
+          send_csi_message = true;
+					csiMessage += "\;[TIMEOUT]\n\r";
+        
         //time_out_csi = return_end_time(15*1e3);
         //ESP_ERROR_CHECK(esp_wifi_disconnect());
         //setup_wifi_csi();
       }
 #else
-			for (int chan=1;chan<12;chan++){
-				printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", chan, bandwith);
-				//ret=esp_wifi_set_channel(chan, ht_chan);
-        esp_wifi_set_channel(chan, ht_chan);
-				//ESP_ERROR_CHECK(ret);
-        usleep(1*1000*1000);
-			}
+			// for (int chan=1;chan<12;chan++){
+			// 	printf("Switching channel to %d with bandwith [None/above/bellow]=%d\n", chan, bandwith);
+			// 	//ret=esp_wifi_set_channel(chan, ht_chan);
+      //   esp_wifi_set_channel(chan, ht_chan);
+			// 	//ESP_ERROR_CHECK(ret);
+      //   usleep(1*1000*1000);
+			// }
 #endif
       //usleep(100*1000);
   }
@@ -433,6 +442,7 @@ void loop() {
         disconnectToWiFi();
         #if (CSI_ENABLE)
           csiMessage ="device,n_scan,mac,reqID,time,id_coleta,len,first_word_invalid,noise_floor,rssi,rate,sig_mode,cwb,stbc,channel,secondary_channel,rx_state\n";
+          time_out_csi = return_end_time(30*1e3);
           begin_csi_scan = true;
           send_csi_message = false;
           conta_csi = 0;
